@@ -3,6 +3,8 @@ import numpy as np
 import glob
 import sys
 
+from pyparsing import col
+
 
 class Image:
     def __init__(self, path) -> None:
@@ -97,3 +99,29 @@ class Image:
         for x1, y1, x2, y2 in lines:
             cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0),
                      thickness=line_thickness)
+
+    def get_color(self, img, colors):
+        color_dict = {'white': 0, 'green': 1, 'red': 2,
+                      'blue': 3, 'orange': 4, 'yellow': 5}
+        h, s, v = tuple(np.mean(img, axis=(0, 1)))
+
+        print(h, s, v)
+
+        for key in list(colors.keys()):
+            h_lower, s_lower, v_lower = self.hsv2cvhsv(colors[key][0])
+            h_upper, s_upper, v_upper = self.hsv2cvhsv(colors[key][1])
+            lower = h >= h_lower and s >= s_lower and v >= v_lower
+            upper = h <= h_upper and s <= s_upper and v <= v_upper
+            if lower and upper:
+                return key
+        return -1
+
+    # color normalization of HSV to OpenCV HSV
+    def hsv2cvhsv(self, hsv: np.array) -> np.array:
+        # For HSV, Hue range is [0,179], Saturation range is [0,255]
+        # and Value range is [0,255]. Different software use different scales.
+        # So if you are comparinn in OpenCV values with them, you need to normalize these ranges.
+        hsv_cv = np.array([180, 255, 255])
+        hsv_orig = np.array([360, 100, 100])
+        cv_hsv = np.divide((hsv * hsv_cv), hsv_orig)
+        return cv_hsv
