@@ -1,4 +1,4 @@
-from cv2 import dilate
+from rubik import Rubik
 from image import Image
 import cv2
 import numpy as np
@@ -66,5 +66,10 @@ def main():
     image.close_window(win_name)
 
 
+def test():
+    rubik = Rubik()
+    print(rubik)
+
+
 if __name__ == '__main__':
-    main()
+    test()
