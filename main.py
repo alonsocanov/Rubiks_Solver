@@ -68,6 +68,7 @@ def main():
 
 def test():
     rubik = Rubik()
+    rubik.create_solved_cube()
     print(rubik)
 
 
