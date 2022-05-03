@@ -32,8 +32,10 @@ class Rubik(object):
     move = ('L', 'L_', 'L2', 'R', 'R_', 'R2', 'U', 'U_', 'U2', 'D', 'D_', 'D2', 'F', 'F_', 'F2', 'B', 'B_',
             'B2', 'Y', 'Y_', 'Y2', 'X', 'X_', 'X2', 'Z', 'Z_', 'Z2', 'M', 'M_', 'M2', 'E', 'E_', 'E2', 'S', 'S_', 'S2')
     # position (face row column)
-    positions = {'ULB': (0, 0, 0), 'UB': (0, 0, 1), 'ULR': (0, 0, 2), 'UL': (0, 1,  0),
-                 'UR': (0, 1, 2), 'ULF': (0, 2, 0), 'UF': (0, 2, 1), 'URF': (0, 2, 2)}
+    up = {'ULB': (0, 0, 0), 'UB': (0, 0, 1), 'ULR': (0, 0, 2), 'UL': (0, 1,  0),
+          'UR': (0, 1, 2), 'ULF': (0, 2, 0), 'UF': (0, 2, 1), 'URF': (0, 2, 2)}
+    front = {'ULB': (0, 0, 0), 'UB': (0, 0, 1), 'ULR': (0, 0, 2), 'UL': (0, 1,  0),
+             'UR': (0, 1, 2), 'ULF': (0, 2, 0), 'UF': (0, 2, 1), 'URF': (0, 2, 2)}
 
     color_corners = {}
     color_edges = {}
@@ -85,14 +87,16 @@ class Rubik(object):
 
     def get_edge_colors(self, pos: str):
         colors = self.color_edges[pos]
-        edge = self.edge[ind]
+        idx = self.edges.index(pos)
+        edge = self.edge[idx]
         if edge.orientation == 1:
             colors[0], colors[1] = colors[1], colors[0]
         return colors
 
     def get_corner_colors(self, pos: str):
         colors = self.color_edges[pos]
-        corner = self.corner[ind]
+        idx = self.corners.index(pos)
+        corner = self.corner[idx]
         if corner.orientation == 1:
             colors[0], colors[1], colors[2] = colors[2], colors[1], colors[0]
         elif corner.orientation == 2:

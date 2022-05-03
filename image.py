@@ -40,8 +40,14 @@ class Image:
     def gaussian_blur(self, img, kernel: tuple = (7, 7), skip: int = 0):
         return cv2.GaussianBlur(img, kernel, skip)
 
-    def canny_edge_detector(self, img, threshold_1: int = 100, threshold_2: int = 200):
-        return cv2.Canny(img, threshold_1, threshold_2)
+    def canny_edge_detector(self, img, threshold_1: int = 100, threshold_2: int = 200, aperture_size: int = 3):
+        return cv2.Canny(img, threshold_1, threshold_2, apertureSize=aperture_size)
+
+    def dilate(self, img, kernel, iterations):
+        return cv2.dilate(img, kernel, iterations=iterations)
+
+    def find_contours(self, img, hierarchy_1, hierarchy_2):
+        return cv2.findContours(img, hierarchy_1, hierarchy_2)
 
     def hsv_to_cv_hsv(self, hsv: np.ndarray) -> np.ndarray:
         '''

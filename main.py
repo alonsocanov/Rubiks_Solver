@@ -30,12 +30,13 @@ def main():
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         gray = image.gray(frame)
 
-        blur = cv2.GaussianBlur(gray, (3, 3), 0)
+        blur = image.gaussian_blur(gray, (3, 3), 0)
 
-        edges = cv2.Canny(blur, threshold1=30, threshold2=100, apertureSize=3)
-        dilate = cv2.dilate(edges, kernel_square, iterations=3)
+        edges = image.canny_edge_detector(
+            blur, threshold1=30, threshold2=100, apertureSize=3)
+        dilate = image.dilate(edges, kernel_square, iterations=3)
 
-        contours, hirarchy = cv2.findContours(
+        contours, hirarchy = image.find_contours(
             dilate, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
         contour_id = 0
