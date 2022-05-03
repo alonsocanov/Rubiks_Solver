@@ -54,10 +54,10 @@ def main():
 
                     color = image.get_color(cubie, hsv_colors)
 
-                    cv2.drawContours(frame, [hull], 0, colors[color], 2)
+                    image.draw_contours(frame, [hull], 0, colors[color], 2)
 
-                    cv2.putText(frame, str(i), (x + int(w / 2), y + int(h/2)),
-                                cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
+                    image.put_text(frame, str(i), (x + int(w / 2), y + int(h/2)),
+                                   cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
                     i += 1
                     face += [np.array([x, y, w, h])]
 
@@ -70,7 +70,8 @@ def main():
 def test():
     rubik = Rubik()
     rubik.create_solved_cube()
-    print(rubik)
+
+    rubik.test_all_colors()
 
 
 if __name__ == '__main__':

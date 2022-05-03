@@ -49,6 +49,12 @@ class Image:
     def find_contours(self, img, hierarchy_1, hierarchy_2):
         return cv2.findContours(img, hierarchy_1, hierarchy_2)
 
+    def put_text(self, img, text: str, coor: tuple, font, font_scale: int, color: tuple, thikness: int):
+        cv2.putText(img, text, coor, font, font_scale, color, thikness)
+
+    def draw_contours(self, img, coor, line_type, color, thikness):
+        cv2.drawContours(img, [coor], line_type, color, thikness)
+
     def hsv_to_cv_hsv(self, hsv: np.ndarray) -> np.ndarray:
         '''
         Color normalization of HSV to OpenCV HSV
