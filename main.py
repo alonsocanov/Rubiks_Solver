@@ -71,7 +71,9 @@ def test():
     rubik = Rubik()
     rubik.create_solved_cube()
 
-    rubik.test_all_colors()
+    print(rubik)
+    rubik.up()
+    print(rubik)
 
 
 if __name__ == '__main__':

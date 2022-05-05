@@ -61,9 +61,9 @@ class Rubik(object):
     color_corners = {}
     color_edges = {}
 
-    edge = []
-    corner = []
-    center = []
+    edge = {}
+    corner = {}
+    center = {}
 
     def __init__(self, cube=None):
         pass
@@ -93,29 +93,27 @@ class Rubik(object):
         for i, val in enumerate(self.edges):
             colors = self.color_edges[val]
             temp = Cubie(index=i, orientation=0, colors=colors, position=val)
-            self.edge += [temp]
+            self.edge[val] = temp
         # Corners
         for i, val in enumerate(self.corners):
             colors = self.color_corners[val]
             temp = Cubie(index=i, orientation=0, colors=colors, position=val)
-            self.corner += [temp]
+            self.corner[val] = temp
         # Centers
         for idx, color in enumerate(colors):
             face = Color(index=idx, color=color)
-            self.center += [face]
+            self.center[color] = face
 
     def get_edge_colors(self, pos: str):
-        colors = self.color_edges[pos]
-        idx = self.edges.index(pos)
-        edge = self.edge[idx]
+        edge = self.edge[pos]
+        colors = edge.color
         if edge.orientation == 1:
             colors[0], colors[1] = colors[1], colors[0]
         return colors
 
     def get_corner_colors(self, pos: str):
-        colors = self.color_corners[pos]
-        idx = self.corners.index(pos)
-        corner = self.corner[idx]
+        corner = self.corner[pos]
+        colors = corner.color
         if corner.orientation == 1:
             colors[0], colors[1], colors[2] = colors[2], colors[1], colors[0]
         elif corner.orientation == 2:
@@ -136,3 +134,53 @@ class Rubik(object):
                     if row != 1 or col != 1:
                         color = self.get_color(face, row, col)
                         print(face, row, col, color)
+
+    def up(self):
+        temp_edge = self.edge['UF']
+        self.edge['UF'] = self.edge['UR']
+        self.edge['UR'] = self.edge['UB']
+        self.edge['UB'] = self.edge['UL']
+        self.edge['UL'] = temp_edge
+
+        temp_corner = self.corner['URF']
+        self.corner['URF'] = self.corner['ULF']
+        self.corner['ULF'] = self.corner['ULB']
+        self.corner['ULB'] = self.corner['URB']
+        self.corner['URB'] = temp_corner
+
+    def __str__(self):
+        string = ''
+        idx_face = 0
+        while idx_face < len(self.faces):
+            if self.faces[idx_face] == 'UP':
+                for row in range(3):
+                    string += '                '
+                    for col in range(3):
+                        if row != 1 or col != 1:
+                            color = self.get_color(
+                                self.faces[idx_face], row, col)
+                            string += color + ' '
+                        else:
+                            string += '    '
+                    string += '\n'
+            if self.faces[idx_face] == 'LEFT' or self.faces[idx_face] == 'FRONT' or self.faces[idx_face] == 'RIGHT' or self.faces[idx_face] == 'BACK':
+                row = 0
+                while row < 3:
+                    col = 0
+                    while col < 3:
+                        if row != 1 or col != 1:
+                            color = self.get_color(
+                                self.faces[idx_face], row, col)
+                            string += color + ' '
+                        else:
+                            string += '     '
+                        if col == 2 and self.faces[idx_face] == 'RIGHT':
+                            col = 0
+                            idx_face += 1
+                            string += '\n'
+                        col += 1
+                    row += 1
+
+            idx_face += 1
+
+        return string
