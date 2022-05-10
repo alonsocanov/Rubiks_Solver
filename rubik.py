@@ -151,7 +151,6 @@ class Rubik(object):
                 for col in range(3):
                     if row != 1 or col != 1:
                         color = self.get_color(face, row, col)
-                        print(face, row, col, color)
 
     def up(self):
         temp_edge = self.edge['UF']
