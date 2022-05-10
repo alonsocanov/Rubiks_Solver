@@ -72,7 +72,7 @@ def test():
     rubik.create_solved_cube()
 
     print(rubik)
-    rubik.up()
+    rubik.right()
     print(rubik)
 
 

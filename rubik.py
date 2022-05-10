@@ -10,6 +10,22 @@ class Cubie(object):
         self.color = colors
         self.position = position
 
+    def set_orientation(self, orientation: int):
+        if len(self.color) == 3:
+            if orientation > 2 or orientation < 0:
+                message = 'Orientation not valid'
+                sys.exit(message)
+            self.orientation = orientation
+
+        elif len(self.color) == 2:
+            if orientation > 1 or orientation < 0:
+                message = 'Orientation not valid'
+                sys.exit(message)
+            self.orientation = orientation
+        else:
+            message = 'Orientation not valid'
+            sys.exit(message)
+
     def __str__(self) -> str:
         return str(self.index) + ', ' + str(self.orientation)
 
@@ -110,16 +126,16 @@ class Rubik(object):
         edge = self.edge[pos]
         colors = edge.color
         if edge.orientation == 1:
-            colors[0], colors[1] = colors[1], colors[0]
+            colors = colors[1], colors[0]
         return colors
 
     def get_corner_colors(self, pos: str):
         corner = self.corner[pos]
         colors = corner.color
         if corner.orientation == 1:
-            colors[0], colors[1], colors[2] = colors[2], colors[1], colors[0]
+            colors = colors[2], colors[1], colors[0]
         elif corner.orientation == 2:
-            colors[0], colors[1], colors[2] = colors[2], colors[0], colors[1]
+            colors = colors[2], colors[0], colors[1]
         return colors
 
     def get_color(self, face: str, row: int, column: int):
@@ -149,6 +165,32 @@ class Rubik(object):
         self.corner['URB'] = self.corner['ULB']
         self.corner['ULB'] = self.corner['ULF']
         self.corner['ULF'] = temp_corner
+
+    def down(self):
+        temp_edge = self.edge['DF']
+        self.edge['DF'] = self.edge['DL']
+        self.edge['DL'] = self.edge['DB']
+        self.edge['DB'] = self.edge['DR']
+        self.edge['DR'] = temp_edge
+
+        temp_corner = self.corner['DRF']
+        self.corner['DRF'] = self.corner['DLF']
+        self.corner['DLF'] = self.corner['DLB']
+        self.corner['DLB'] = self.corner['DRB']
+        self.corner['DRB'] = temp_corner
+
+    def right(self):
+        temp_edge = self.edge['UR']
+        self.edge['UR'] = self.edge['FR']
+        self.edge['FR'] = self.edge['DR']
+        self.edge['DR'] = self.edge['BR']
+        self.edge['BR'] = temp_edge
+
+        temp_corner = self.corner['URF']
+        self.corner['URF'] = self.corner['DRF']
+        self.corner['DRF'] = self.corner['DRB']
+        self.corner['DRB'] = self.corner['URB']
+        self.corner['URB'] = temp_corner
 
     def __str__(self):
         string = ''
