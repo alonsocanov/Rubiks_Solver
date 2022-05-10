@@ -27,6 +27,8 @@ class Rubik(object):
 
     faces = ('UP', 'LEFT', 'FRONT', 'RIGHT', 'BACK', 'DOWN')
     colors = ('WHITE', 'GREEN', 'RED', 'BLUE', 'ORANGE', 'YELLOW')
+    abr_colors = {'WHITE': 'WHI', 'GREEN': 'GRE', 'RED': 'RED',
+                  'BLUE': 'BLU', 'ORANGE': 'ORA', 'YELLOW': 'YEL'}
     edges = ('UB', 'UR', 'UF', 'UL', 'FR', 'FL',
              'BL', 'BR', 'DF', 'DL', 'DB', 'DR')
     corners = ('ULB', 'URB', 'URF', 'ULF', 'DLF', 'DLB', 'DRB', 'DRF')
@@ -143,44 +145,55 @@ class Rubik(object):
         self.edge['UL'] = temp_edge
 
         temp_corner = self.corner['URF']
-        self.corner['URF'] = self.corner['ULF']
-        self.corner['ULF'] = self.corner['ULB']
-        self.corner['ULB'] = self.corner['URB']
-        self.corner['URB'] = temp_corner
+        self.corner['URF'] = self.corner['URB']
+        self.corner['URB'] = self.corner['ULB']
+        self.corner['ULB'] = self.corner['ULF']
+        self.corner['ULF'] = temp_corner
 
     def __str__(self):
         string = ''
-        idx_face = 0
-        while idx_face < len(self.faces):
-            if self.faces[idx_face] == 'UP':
-                for row in range(3):
-                    string += '                '
-                    for col in range(3):
-                        if row != 1 or col != 1:
-                            color = self.get_color(
-                                self.faces[idx_face], row, col)
-                            string += color + ' '
-                        else:
-                            string += '    '
-                    string += '\n'
-            if self.faces[idx_face] == 'LEFT' or self.faces[idx_face] == 'FRONT' or self.faces[idx_face] == 'RIGHT' or self.faces[idx_face] == 'BACK':
-                row = 0
-                while row < 3:
-                    col = 0
-                    while col < 3:
-                        if row != 1 or col != 1:
-                            color = self.get_color(
-                                self.faces[idx_face], row, col)
-                            string += color + ' '
-                        else:
-                            string += '     '
-                        if col == 2 and self.faces[idx_face] == 'RIGHT':
-                            col = 0
-                            idx_face += 1
-                            string += '\n'
-                        col += 1
-                    row += 1
 
-            idx_face += 1
+        face = 'UP'
+        for row in range(3):
+            string += '            '
+            for col in range(3):
+                if row != 1 or col != 1:
+                    color = self.get_color(face, row, col)
+                    string += self.abr_colors[color] + ' '
+                else:
+                    string += '    '
+            string += '\n'
+
+        face_order = ['LEFT', 'FRONT', 'RIGHT', 'BACK']
+        idx_face = 0
+        row = 0
+        col = 0
+        while idx_face < len(face_order) and col < 3 and row < 3:
+
+            face = face_order[idx_face]
+            if row != 1 or col != 1:
+                color = self.get_color(face, row, col)
+                string += self.abr_colors[color] + ' '
+            else:
+                string += '    '
+            col += 1
+            if col == 3 and idx_face < len(face_order):
+                col = 0
+                idx_face += 1
+            if idx_face == len(face_order):
+                row += 1
+                idx_face = 0
+                string += '\n'
+
+        face = 'DOWN'
+        for row in range(3):
+            string += '            '
+            for col in range(3):
+                if row != 1 or col != 1:
+                    color = self.get_color(face, row, col)
+                    string += self.abr_colors[color] + ' '
+                else:
+                    string += '    '
+            string += '\n'
 
         return string
